@@ -2,6 +2,8 @@
 #                           Klysman Rezende 
 #                           23/04
 
+Teste de integra√ß√£o do Visual Code com Git Hub!
+
 
 #numero de operarios
 param m;
@@ -10,7 +12,7 @@ param m;
 param n, <=m;
 
 
-#Custo da alaocaÁ„o
+#Custo da alaocaÔøΩÔøΩo
 param c{i in 1..m, j in 1..n}, >= 0;
 
 #Variaveis
@@ -19,7 +21,6 @@ var x{i in 1..m, j in 1..n}, binary;
 
 #Funcao objetivo
 minimize obj: sum{i in 1..m, j in 1..n} c[i,j] * x[i,j];
-
 
 s.t. oper{i in 1..m}: sum{j in 1..n} x[i,j] <= 1;
 
