@@ -1,4 +1,4 @@
-/* CPP, Critical Path Problem */
+/*  PROBLEMA DO CAMINHO CRITICO */
 
 /* Written in GNU MathProg by Andrew Makhorin <mao@gnu.org> */
 
