@@ -1,35 +1,28 @@
 /*  PROBLEMA DO CAMINHO CRITICO */
 
-/* Written in GNU MathProg by Andrew Makhorin <mao@gnu.org> */
-
-/* Note: Reduced costs of auxiliary variables phi[j,k] (see below)
-         can be only zero or one. The critical path is defined by the
-         constraints, whose reduced cost is one. */
-
 set J;
-/* set of jobs (activities) */
+#CONJUNTO DE ATIVIDADES
 
 set P{j in J}, in J, default {};
-/* P[j] is a subset of jobs that immediately precede job j */
+#SUB-CONJUNTO DE TAREFAS QUE PRECEDE IMEDIATAMENTE O TRABALHO j
 
 param t{j in J}, >= 0;
-/* duration required to perform job j */
+#DURAÇÃO NECESSÁRIA PRA EXECUTAR O TRABALHO j
 
 var x{j in J}, >= 0;
-/* starting time of job j */
+#HORA DE INICIO DO TRABALHO j
 
 s.t. phi{j in J, k in P[j]}: x[j] >= x[k] + t[k];
-/* job j can start only after all immediately preceding jobs have been
-   completely performed */
+#TRABALHO SÓ PODE COMEÇAR DEPOIS DE TODOS OS TRABALHOS IMEDIATAMENTE ANTERIORES TEREM SIDO COMPLETAMENTE EXECUTADO
 
 var z;
-/* project makespan */
+#PROJETO MAKESPAN
 
 s.t. fin{j in J}: z >= x[j] + t[j];
-/* which is the maximum of the completion times of all the jobs */
+# QUE É O MAXIMO DOS TEMPOS DE CONCLUSÃO DE TODOS OS TRABALHOS
 
 minimize obj: z;
-/* the objective is make z as small as possible */
+#OBJETIVO É TORNAR O Z O MENOR POSSÍVEL
 
 data;
 
