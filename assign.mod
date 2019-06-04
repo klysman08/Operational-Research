@@ -2,7 +2,7 @@
 #                           Klysman Rezende 
 #                           23/04
 
-Teste de integração do Visual Code com Git Hub!
+#Teste de integração do Visual Code com Git Hub!
 
 
 #numero de operarios
@@ -28,15 +28,17 @@ s.t. tarefas{j in 1..n}: sum{i in 1..m} x[i,j] = 1;
 
 
 
-solve;
+#solve;
 
+#printf "\n"
+
+/*
+printf "Oper  Taref       Custo\n";
+printf{i in I} "%5d %5d %10g\n", i, sum{j in J} j * x[i,j],
+   sum{j in J} c[i,j] * x[i,j];
+printf "----------------------\n";
+printf "     Total: %10g\n", sum{i in I, j in J} c[i,j] * x[i,j];
 printf "\n";
-" oper Taref Custo \n";
-printf{i in I} "%5d %5d %10g\n", i, sum {j in J} j* x[i, j]
-	sum{j in J} c[i,j]*x[i,j]
-printf "------------\n"
-printf "Total: %10g\n", sum{i in I, j in J} c[i,j] * x[i,j];
-printf "\n"
+*/
 end;
-
 

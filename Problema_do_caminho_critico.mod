@@ -1,3 +1,8 @@
+#Programa do Assign
+#                           Klysman Rezende 
+#                           10/06
+
+
 /*  PROBLEMA DO CAMINHO CRITICO */
 
 set J;
