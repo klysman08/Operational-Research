@@ -1,0 +1,105 @@
+
+Solving Job-shop problems with Multi-Purpose Machines
+
+This directory containes algorithms to solve job-shop scheduling
+problems with multi-purpose machines. Heuristics for calculating
+approximate solutions, a branch and bound
+method for solving such problems exactly, and algorithms to calculate
+lower bounds are provided. Sources (in C-Language) and
+executable codes (for Sun 4 workstations) are available. The
+algorithms were implemented by Bernd Jurisch, Johannes Stille,
+and Monika Thole at Universitaet Osnabrueck, Germany.
+
+Contents of the directories:
+
+BRANCH: 
+	A branch and bound procedure as described in Jurisch [1992].
+	Use the command 'mpm_branch [-u] problem_file'.
+	By -u an initial upper bound can be prespecified.
+	It returns the values of the solutions found so far
+	during the branch and bound procedure and the number of
+	searchtree nodes already inspected.
+	Ex.: mpm_branch -u 2000 ../DATA/edata/mt06
+
+	Executable code is obtained by application of 'make'.
+
+HEUR-TABU:
+	Tabu search heuristics as described in Hurink et al. [1994]
+	and Jurisch [1992]. 
+	Use the command 'mpm_tabu_NB1 problem_file tabu_length output_file'
+	or 'mpm_tabu_NB2 problem_file tabu_length output_file'.
+	It returns the best found objective value after at most 1000
+	iterations and the iteration when
+	it was found. In 'output_file' the corresponding schedule is
+	given by the order of the operations for each machine.
+	Ex.: mpm_tabu_NB1 ../DATA/edata/mt06 30 mt06.out
+
+	The number of iterations is defined by the constant 'MaxIter'
+	in the module 'datast.h'. 
+
+	Executable code is obtained by 'gcc -o mpm_tabu_NB1 mpm_tabu_NB1.c'
+
+
+HEUR-BEAM:
+	A beam search heuristic based on insertion techniques as
+	described in Jurisch [1992].
+	Use the command 'mpm_beam  problem_file'.
+	It returns the best found objective value with beam width 3.
+	Ex.: mpm_beam ../DATA/edata/mt06
+
+	The  beam width is defined by the constant 'MAXBEAM' in the
+	module 'heur-werner.c'.
+
+	Executable code is obtained by application of 'make'.
+
+LB:
+	Lower bounds for the problem as described in Jurisch [1991], 
+	Jurisch [1992], and Brucker et al. [1994].
+	Use the command 'mpm_lb problem_file'.
+	It returns the lower bound values obtained by
+	  -the two job relaxation Jurisch ([1991], Jurisch [1992])
+	  -the parallel machine relaxation with heads and tails
+		and preemption (Jurisch [1992], Brucker et al. [1994]).
+
+	Executable code is obtained by application of 'make'.
+
+DATA:
+	The data sets 'edata','rdata' and 'vdata' as described in
+	Hurink et al. [1994] and Jurisch [1992]. The problem_files are
+	organized as follos:
+
+
+
+	Number of machines      Number of jobs
+	For each job: Number of Operations
+		      Data of the operations according to the job order
+		      
+		      For each Operation:  processing time
+				           Number of possible machines
+				           indices of the machines 
+
+	Ex.: A job-shop problem with 3 machines and 2 jobs:
+	     The first operation of job 1 needs 21 time units and can 
+		be processed on machine 1 or machine 3.
+	     The second operation of job 1 needs 12 time units and can 
+                be processed only on machine 2.
+	     Job 2 consists only of one operation with processing time 17.
+	        This operation can be processed by each machine.
+
+	     This problem is encoded as follows:
+	     	3 2
+		2  21 2 1 3	12 1 3
+		1  17 3 1 2 3
+
+References:
+  P. Brucker, B. Jurisch, A. Kraemer [1994]: Complexity of scheduling problems 
+	with  multi-purpose machines, Osnabr"ucker Schriften zur Mathematik, 
+	Reihe P, No. 166
+  J. Hurink, B. Jurisch, M. Thole [1994]:  Tabu search for the
+	job-shop scheduling problem with multi-purpose machines,
+	OR Spektrum 15, pp. 205-215.
+  B. Jurisch [1991]:  Lower Bounds for the Job-Shop Scheduling Problem on
+	Multi-Purpose Machines, to appear in Discrete Applied Mathematics.
+  B. Jurisch [1992]: Scheduling jobs in shops with multi-purpose machines, 
+	Dissertation,
+	Fachbereich Mathematik/Informatik, Universit"at Osnabr"uck.
