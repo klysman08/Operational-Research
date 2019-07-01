@@ -1,18 +1,6 @@
-/* JSSP, Job-Shop Scheduling Problem */
-
-/* Written in GNU MathProg by Andrew Makhorin <mao@gnu.org> */
-
-/* The Job-Shop Scheduling Problem (JSSP) is to schedule a set of jobs
-   on a set of machines, subject to the constraint that each machine can
-   handle at most one job at a time and the fact that each job has a
-   specified processing order through the machines. The objective is to
-   schedule the jobs so as to minimize the maximum of their completion
-   times.
-
-   Reference:
-   D. Applegate and W. Cook, "A Computational Study of the Job-Shop
-   Scheduling Problem", ORSA J. On Comput., Vol. 3, No. 2, Spring 1991,
-   pp. 149-156. */
+#Problema do Job Shop
+#Nome: Klysman Rezende 
+#Matricula: 2017108779
 
 param n, integer, > 0;
 /* number of jobs */

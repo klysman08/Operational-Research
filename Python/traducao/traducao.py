@@ -10,6 +10,12 @@
 # 16/11/2017
 # agradecimento as contribuicoes do Prof. Ricardo Camargo, DEP
 # ------------------------------
+
+#Em exercicio. 20/06/2019
+#Nome: Klysman Rezende 
+#Matricula: 2017108779 
+
+
 import sys
 import os
 
