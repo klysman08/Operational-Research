@@ -47,7 +47,7 @@ if __name__ == "__main__":
          print("Uso:\n python {:s} [arquivo de dados - txt ou json]".format(sys.argv[0]))
          sys.exit(-1)
 
-      tipo_arquivo = sys.argv[1][sys.argv[1].rfind('.')+1:len(sys.argv[1])]   #(*@\label{ln:filetype}@*)
+      tipo_arquivo = sys.argv[1][sys.argv[1].rfind('.')+1:]
       if (tipo_arquivo == "txt"):
          # le parametros de um arquivo txt
          np,nm,obj,lado_direito,restricoes  = le_dados_txt(sys.argv[1])
@@ -61,22 +61,28 @@ if __name__ == "__main__":
       prob.variables.add(obj   = obj, lb    = [0.0] * np, ub    = [cplex.infinity] * np, names = [ "x_P{:d}".format(j+1) for j in range(np)]) #(*@\label{ln:of}@*) 
 
       # com um unico comando de instrucao
-      # podemos criar as restricoes 
-      [prob.linear_constraints.add(lin_expr = [ 
-                               cplex.SparsePair([j for j in range(np)], [restricoes[i][j] for j in range(np)]) ], 
-                               senses   = "L", 
-                               rhs      = [lado_direito[i]], 
-                               names    = ["M{:d}".format(i+1)]) for i in range(nm)]    #(*@\label{ln:constraints}@*)
-     
+      # podemos criar as restricoes
+      [
+          prob.linear_constraints.add(
+              lin_expr=[
+                  cplex.SparsePair(list(range(np)),
+                                   [restricoes[i][j] for j in range(np)])
+              ],
+              senses="L",
+              rhs=[lado_direito[i]],
+              names=["M{:d}".format(i + 1)],
+          ) for i in range(nm)
+      ]
+
       prob.solve()
-  
+
       if (prob.solution.get_status() == prob.solution.status.optimal):
          print("")
          print("Status       : {:d} ({:s})".format(prob.solution.get_status(),
                                                    prob.solution.status[prob.solution.get_status()]))
          of = prob.solution.get_objective_value()
          print("Solucao otima: ${:10.2f}".format(of))
-       
+
          numcols = prob.variables.get_num()
 
          x = prob.solution.get_values()
@@ -94,7 +100,7 @@ if __name__ == "__main__":
          print("Maquina  : Folga ")
          for i in range(numlins): 
              print("{:8d} : {:10.2f}".format(i+1,folgas[i]))
-           
+
          faz_grafico_pizza(np,x) #(*@\label{ln:plotpie}@*)
          faz_grafico_barra(np,x) #(*@\label{ln:plotbar}@*)
          faz_relatorio(np,x,of)         #(*@\label{ln:report}@*)
@@ -103,7 +109,7 @@ if __name__ == "__main__":
          print("Status       : {:d} ({:s})".format(prob.solution.get_status(),
                                                    prob.solution.status[prob.solution.get_status()]))
          raise ValueError('Erro ao otimizar o modelo')
-          
+
    except CplexError as exc:
       print(exc)
       sys.exit(-1)
@@ -112,41 +118,34 @@ if __name__ == "__main__":
 #
 # ------------------------------
 def le_dados_txt(arquivo):
-    if (os.path.isfile(arquivo) == False):
-       raise ValueError('Arquivo {:s} nao encontrado'.format(arquivo))
-        
-    fl = open(arquivo,'r')
-    # -------------------------
-    # le linhas e remove linhas em branco 
-    # -------------------------
-    lines = (line.strip() for line in fl)
-    lines = (line for line in lines if line)
-    
-    # -------------------------
-    # le dados 
-    # -------------------------
-    np = int(next(lines))        # numero de produtos 
-    nm = int(next(lines))        # numero de maquinas 
+   if (os.path.isfile(arquivo) == False):
+      raise ValueError('Arquivo {:s} nao encontrado'.format(arquivo))
 
-    # le uma linha, separando
-    # os elementos por espacos em branco
-    # os elementos sao lidos como string
-    ln = next(lines).split()
-    obj = []                     # criando um vetor dinamicamente
-    for it in ln: 
-        obj.append(float(it))    # inserindo elementos dinamicamente no vetor 
+   with open(arquivo,'r') as fl:
+      # -------------------------
+      # le linhas e remove linhas em branco 
+      # -------------------------
+      lines = (line.strip() for line in fl)
+      lines = (line for line in lines if line)
 
-    # le uma linha separando por espaco em branco 
-    # e mapeando num vetor com valores do tipo float
-    lado_direito = map(float,next(lines).split())
+      # -------------------------
+      # le dados 
+      # -------------------------
+      np = int(next(lines))        # numero de produtos 
+      nm = int(next(lines))        # numero de maquinas 
 
-    # le uma matriz
-    restricoes = [map(float,next(lines).split()) for i in range(nm)] 
-    # -------------------------
-    # fechando arquivo de dados 
-    # -------------------------
-    fl.close() 
-    return np,nm,obj,lado_direito,restricoes
+      # le uma linha, separando
+      # os elementos por espacos em branco
+      # os elementos sao lidos como string
+      ln = next(lines).split()
+      obj = [float(it) for it in ln]
+      # le uma linha separando por espaco em branco 
+      # e mapeando num vetor com valores do tipo float
+      lado_direito = map(float,next(lines).split())
+
+          # le uma matriz
+      restricoes = [map(float,next(lines).split()) for _ in range(nm)]
+   return np,nm,obj,lado_direito,restricoes
 # ------------------------------
 #
 # ------------------------------
@@ -172,37 +171,37 @@ def le_dados_json(arquivo):
 #                               
 # ------------------------------
 def faz_grafico_pizza(np,x): 
-    colors_ = [v for (u,v) in list(six.iteritems(colors.cnames))]
-    cores = [colors_[random.randint(0,len(colors_))] for i in range(np)]
+   colors_ = [v for (u,v) in list(six.iteritems(colors.cnames))]
+   cores = [colors_[random.randint(0,len(colors_))] for _ in range(np)]
 
-    total_produzido = sum(x)
-    rotulos = ["Produto {:d}".format(j+1) for j in range(np)]      
-    tamanhos = [x[j]/total_produzido for j in range(np)] 
+   total_produzido = sum(x)
+   rotulos = ["Produto {:d}".format(j+1) for j in range(np)]
+   tamanhos = [x[j]/total_produzido for j in range(np)] 
 
-    fig = plt.figure()
-    plt.pie(tamanhos, labels=rotulos, colors = cores, autopct='%1.1f%%', shadow=True, startangle=90)
-    plt.axis('equal')
-    plt.show()
-    fig.savefig("piechart.pdf",format='pdf')
-    fig.savefig("piechart.png",format='png')
+   fig = plt.figure()
+   plt.pie(tamanhos, labels=rotulos, colors = cores, autopct='%1.1f%%', shadow=True, startangle=90)
+   plt.axis('equal')
+   plt.show()
+   fig.savefig("piechart.pdf",format='pdf')
+   fig.savefig("piechart.png",format='png')
 # ------------------------------
 #
 # ------------------------------
 def faz_grafico_barra(np,x):
-    colors_ = [v for (u,v) in list(six.iteritems(colors.cnames))]
-    cores = [colors_[random.randint(0,len(colors_))] for i in range(np)]
-    
-    rotulos = ["Produto {:d}".format(j+1) for j in range(np)]      
-    posicao = [i for i in range(np)]
+   colors_ = [v for (u,v) in list(six.iteritems(colors.cnames))]
+   cores = [colors_[random.randint(0,len(colors_))] for _ in range(np)]
 
-    fig = plt.figure()
-    plt.bar(posicao, x, align="center", alpha=0.5)#, colors = cores)
-    plt.ylabel("Producao")
-    plt.title("Producao de cada produto")
-    plt.xticks(posicao,rotulos)
-    plt.show()
-    fig.savefig("barchart.pdf",format='pdf')
-    fig.savefig("barchart.png",format='png')
+   rotulos = ["Produto {:d}".format(j+1) for j in range(np)]
+   posicao = list(range(np))
+
+   fig = plt.figure()
+   plt.bar(posicao, x, align="center", alpha=0.5)#, colors = cores)
+   plt.ylabel("Producao")
+   plt.title("Producao de cada produto")
+   plt.xticks(posicao,rotulos)
+   plt.show()
+   fig.savefig("barchart.pdf",format='pdf')
+   fig.savefig("barchart.png",format='png')
 # ------------------------------
 #
 # ------------------------------
