@@ -187,8 +187,8 @@ if __name__ == "__main__":
         print("Temp de proc - Maq")
         while ii < numOpJob[i]:
             print("        {:0d}       {:0d}".format(lisTemProcJob[i][ii],lisMaqJob[i][ii]))
-            ii = ii + 1
-        i = i + 1
+            ii += 1
+        i += 1
 
     # Calculo do numero de operacoes
     no = 0
@@ -199,10 +199,7 @@ if __name__ == "__main__":
     # cada elemento da lista contem o job, a maquina e o tempo de processamento
     listOper = []
     for i in range(no):
-        # cria a linha linha com zeros
-        linhaListOper = []
-        for j in range(3):
-            linhaListOper.append(0)
+        linhaListOper = [0 for _ in range(3)]
         # colocar a linha na lista de operacoes
         listOper.append(linhaListOper)
 
@@ -212,9 +209,9 @@ if __name__ == "__main__":
         for jj in range(numOpJob[ii]):
             j = 0       # para percorer a linha da lista de operacoes
             listOper[i][j] = ii + 1
-            j = j + 1
+            j += 1
             listOper[i][j] = lisMaqJob[ii][jj]
-            j = j + 1
+            j += 1
             listOper[i][j] = lisTemProcJob[ii][jj]
             i = i + 1
 
@@ -232,9 +229,7 @@ if __name__ == "__main__":
     for i in range(no - 1):
         if (listOper[i][0] == listOper[i + 1][0]):
             nA = nA + 1
-            par = []
-            for j in range(2):
-                par.append(0)
+            par = [0 for _ in range(2)]
             par[0] = i + 1
             par[1] = i + 2
             A.append(par)
